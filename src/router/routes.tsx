@@ -7,45 +7,51 @@ import Contact from "../pages/Contact";
 import MyProfile from "../pages/MyProfile";
 import MyAppointments from "../pages/MyAppointments";
 import Appointment from "../pages/Appointment";
+import MainLayout from "../App";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/doctors",
-    element:<Doctors/>
-  },
-  {
-    path: "/doctors/speciality",
-    element:<Doctors/>
+    element: <MainLayout />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "/doctors",
+        element: <Doctors />,
+      },
+      {
+        path: "/doctors/speciality",
+        element: <Doctors />,
+      },
+      {
+        path: "/about",
+        element: <About />,
+      },
+      {
+        path: "/contact",
+        element: <Contact />,
+      },
+      {
+        path: "/my-profile",
+        element: <MyProfile />,
+      },
+      {
+        path: "/my-appointments",
+        element: <MyAppointments />,
+      },
+      {
+        path: "/appointment/:doctorId",
+        element: <Appointment />,
+      },
+    ],
   },
   {
     path: "/login",
-    element: <Login/>
+    element: <Login />,
   },
-  {
-    path: "/about",
-    element: <About/>
-  },
-  {
-    path: "/contact",
-    element: <Contact/>
-  },
-  {
-    path: "/my-profile",
-    element: <MyProfile/>
-  },
-  {
-    path: "/my-appointments",
-    element: <MyAppointments/>
-  },
-  {
-    path: "/appointment/:docId",
-    element: <Appointment/>
-  },
-  
 ]);
 
 export default router;
