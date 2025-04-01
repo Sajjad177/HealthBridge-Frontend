@@ -9,7 +9,7 @@ const Header = () => {
           Book Appointment <br />
           With Trusted Doctors
         </h1>
-        <div className="flex flex-col gap-2 md:flex-row items-center gap-4 text-white text-sm font-light">
+        <div className="flex flex-col md:flex-row items-center gap-4 text-white text-sm font-light">
           <img src={assets.group_profiles} alt="" className="w-28" />
           <p className="">
             Simply browse through our extensive list of trusted doctors,{" "}
@@ -18,7 +18,7 @@ const Header = () => {
           </p>
         </div>
         <a
-          href=""
+          href="#spaciality"  // start there header
           className="flex items-center gap-2 bg-white font-semibold px-8 py-3 rounded-full text-gray-600 text-sm m-auto md:m-0 hover:scale-105 transition-all duration-300 ease-in-out w-fit"
         >
           Book Appointment{" "}
