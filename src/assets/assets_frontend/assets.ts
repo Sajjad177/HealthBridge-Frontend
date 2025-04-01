@@ -58,6 +58,8 @@ export const assets = {
     razorpay_logo
 }
 
+export const currency = "৳";
+
 export const specialityData = [
     {
         speciality: 'General physician',
@@ -83,6 +85,7 @@ export const specialityData = [
         speciality: 'Gastroenterologist',
         image: Gastroenterologist
     },
+    
 ]
 
 export const doctors = [
@@ -297,3 +300,8 @@ export const doctors = [
         }
     },
 ]
+
+
+
+
+export const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];

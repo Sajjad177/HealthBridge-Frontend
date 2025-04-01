@@ -63,8 +63,8 @@ const Doctors = () => {
                   alt={item.name}
                   className=" bg-blue-50"
                 />
-                <div className="p-4 text-center">
-                  <div className="flex items-center justify-center gap-2 text-sm text-green-500">
+                <div className="p-4">
+                  <div className="flex items-center  gap-2 text-sm text-green-500">
                     <span className="w-2 h-2 bg-green-500 rounded-full inline-block"></span>
                     <p>Available</p>
                   </div>
