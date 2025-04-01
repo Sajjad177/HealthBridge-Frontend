@@ -1,6 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import { doctors } from "../assets/assets_frontend/assets";
 
 const TopDoctors = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="flex flex-col items-center gap-4 my-16 text-gray-900 w-full px-4">
       <h1 className="text-3xl font-medium text-center">Top Doctors to Book</h1>
@@ -13,6 +16,7 @@ const TopDoctors = () => {
         {doctors.slice(0, 10).map((item, index) => (
           <div
             key={index}
+            onClick={() => navigate(`/appointment/${item._id}`)}
             className="border border-blue-200 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-2 transition-all duration-300 ease-in-out"
           >
             <img src={item.image} alt={item.name} className=" bg-blue-50" />
@@ -29,7 +33,10 @@ const TopDoctors = () => {
       </div>
 
       {/* More Button */}
-      <button className="mt-10 px-12 py-3 bg-blue-50 font-semibold text-gray-600 rounded-full cursor-pointer hover:bg-blue-100 transition duration-300">
+      <button
+        onClick={() => navigate("/doctors")}
+        className="mt-10 px-12 py-3 bg-blue-50 font-semibold text-gray-600 rounded-full cursor-pointer hover:bg-blue-100 transition duration-300"
+      >
         More
       </button>
     </div>
