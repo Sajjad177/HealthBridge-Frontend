@@ -109,7 +109,7 @@ const Appointment = () => {
       </div>
 
       {/* --------- Booking Slot -------------- */}
-      <div className="sm:ml-72 sm:pl-4 mt-4 font-medium text-gray-700">
+      <div className="sm:ml-72 sm:pl-4 mt-10 font-medium text-gray-700">
         <p>Booking slots</p>
         <div className="flex gap-3 items-center w-full overflow-x-auto mt-4">
           {docSlots.length > 0 &&

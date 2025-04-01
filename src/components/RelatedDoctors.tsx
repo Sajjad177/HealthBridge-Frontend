@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { doctors } from "../assets/assets_frontend/assets";
+import { useNavigate } from "react-router-dom";
 
 const RelatedDoctors = ({ speciality, docId }) => {
+  const navigate = useNavigate();
   const [relatedDoc, setRelatedDoc] = useState();
 
   return (
@@ -16,7 +18,10 @@ const RelatedDoctors = ({ speciality, docId }) => {
         {doctors.slice(0, 5).map((item, index) => (
           <div
             key={index}
-            // onClick={() => navigate(`/appointment/${item._id}`)}
+            onClick={() => {
+              navigate(`/appointment/${item._id}`);
+              scrollTo(0, 0);
+            }}
             className="border border-blue-200 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-2 transition-all duration-300 ease-in-out"
           >
             <img src={item.image} alt={item.name} className=" bg-blue-50" />
