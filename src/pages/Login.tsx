@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 const Login = () => {
   const [state, setState] = useState("Sign Up");
 
-  // React Hook Form
   const {
     register,
     handleSubmit,
