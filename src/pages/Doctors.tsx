@@ -6,8 +6,8 @@ const Doctors = () => {
   const { speciality } = useParams();
   const navigate = useNavigate();
   const [filterDoc, setFilterDoc] = useState([]);
+  const [showFilter, setShowFilter] = useState(false);
 
- 
   const filteredDoctors = useMemo(() => {
     return speciality
       ? doctors.filter((doc) => doc.speciality === speciality)
@@ -23,8 +23,20 @@ const Doctors = () => {
       <p className="text-gray-600">Browse through the doctors specialist.</p>
 
       <div className="flex flex-col sm:flex-row items-start gap-5 mt-5">
+        <button
+          onClick={() => setShowFilter(!showFilter)}
+          className={`py-2 px-4 border border-gray-300 rounded transition-all cursor-pointer sm:hidden ${
+            showFilter ? "bg-primary text-white" : ""
+          }`}
+        >
+          Filter
+        </button>
         {/* -------- Speciality Menu -------- */}
-        <div className="flex flex-col gap-3 text-sm text-gray-600">
+        <div
+          className={` flex-col gap-3 text-sm text-gray-600 ${
+            showFilter ? "flex" : "hidden sm:flex"
+          }`}
+        >
           {[
             "General physician",
             "Gynecologist",
@@ -58,11 +70,7 @@ const Doctors = () => {
                 onClick={() => navigate(`/appointment/${item._id}`)}
                 className="border border-blue-200 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-2 transition-all duration-300 ease-in-out "
               >
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className=" bg-blue-50"
-                />
+                <img src={item.image} alt={item.name} className=" bg-blue-50" />
                 <div className="p-4">
                   <div className="flex items-center  gap-2 text-sm text-green-500">
                     <span className="w-2 h-2 bg-green-500 rounded-full inline-block"></span>

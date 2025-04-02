@@ -52,3 +52,10 @@
     grid-template-columns: repeat(1, 1fr);
   }
 }
+
+
+@media (max-width: 740px) {
+  .active p {
+    @apply text-white bg-[#5f5fff]  ;
+  }
+}
