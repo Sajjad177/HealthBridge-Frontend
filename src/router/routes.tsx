@@ -8,6 +8,8 @@ import MyProfile from "../pages/MyProfile";
 import MyAppointments from "../pages/MyAppointments";
 import Appointment from "../pages/Appointment";
 import MainLayout from "../App";
+import Dashboard from "../pages/Dashboard/Dashboard";
+import dashbardRouters from "./dashboardRoutes";
 
 const router = createBrowserRouter([
   {
@@ -47,6 +49,12 @@ const router = createBrowserRouter([
         element: <Appointment />,
       },
     ],
+  },
+  //* this is for dashboard------------
+  {
+    path: "/dashboard",
+    element: <Dashboard />,
+    children: dashbardRouters,
   },
   {
     path: "/login",
