@@ -3,6 +3,7 @@ import { adminAssets } from "../../../assets/assets_admin/adminAssets";
 
 const AddDoctor = () => {
   const { register, handleSubmit } = useForm();
+  //* show error for image not selected
 
   const onSubmit = (data) => {
     console.log("Doctor Form Data:", data);
