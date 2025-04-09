@@ -4,6 +4,7 @@ import { assets } from "../assets/assets_frontend/assets";
 
 const MyProfile = () => {
   const [isEdit, setIsEdit] = useState(false);
+  const [image, setImage] = useState("");
 
   const { register, handleSubmit, watch } = useForm({
     defaultValues: {
@@ -29,11 +30,35 @@ const MyProfile = () => {
     >
       {/* Profile Image */}
       <div className="flex justify-center">
-        <img
-          src={watch("image")}
-          alt="Profile"
-          className="w-36 h-36 rounded-full border-2 border-gray-300 object-cover"
-        />
+        {isEdit ? (
+          <label htmlFor="image">
+            <div className="inline-block relative cursor-pointer">
+              {/* ----------check this there image is there------ */}
+              <img
+                src={image ? URL.createObjectURL(image) : watch("image")}
+                alt=""
+                className="cursor-pointer w-36 rounded opacity-75"
+              />
+              <img
+                src={image ? "" : assets.upload_icon}
+                alt=""
+                className="absolute w-10 bottom-12 right-12 cursor-pointer"
+              />
+            </div>
+            <input
+              onChange={(e) => setImage(e.target.files[0])}
+              type="file"
+              id="image"
+              hidden
+            />
+          </label>
+        ) : (
+          <img
+            src={watch("image")}
+            alt="Profile"
+            className="w-36 h-36 rounded-full border-2 border-gray-300 object-cover"
+          />
+        )}
       </div>
 
       {/* Name Field */}

@@ -1,6 +1,8 @@
 import { doctors } from "../assets/assets_frontend/assets";
 
 const MyAppointments = () => {
+  //* when [!item.cancelled ] then show a deleted icon when clicked then delete the appointment fom ui.
+
   return (
     <div>
       <p className="text-xl pb-3 mt-12 font-medium text-zinc-700 border-b border-zinc-200">
@@ -27,12 +29,24 @@ const MyAppointments = () => {
             </div>
             <div></div>
             <div className="flex flex-col gap-2 justify-end">
-              <button className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border border-stone-500 rounded cursor-pointer hover:bg-[#5f5fff] hover:text-white transition-all duration-300 ease-in-out">
+              {/* {!item.isCancelled && (
+                <button className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border border-stone-500 rounded cursor-pointer hover:bg-[#5f5fff] hover:text-white transition-all duration-300 ease-in-out">
+                  Pay Online
+                </button>
+              )}
+              {item.isCancelled && (
+                <button className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border border-stone-500 rounded cursor-pointer hover:bg-red-600 hover:text-white transition-all duration-300 ease-in-out">
+                  Cancel Appointment
+                </button>
+              )}
+              {!item.isCancelled && <button className="sm:min-w-48 border border-red-500 rounded text-red-400">Appointment Cancel</button> } */}
+              <button className="border border-[#5f5fff] py-2 rounded">
                 Pay Online
               </button>
-              <button className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border border-stone-500 rounded cursor-pointer hover:bg-red-600 hover:text-white transition-all duration-300 ease-in-out">
-                Cancel Appointment
+              <button className="border border-[#d85c3d] py-2 rounded">
+                Cancelled Appointment
               </button>
+              {/* <button>Pay Online</button> */}
             </div>
           </div>
         ))}

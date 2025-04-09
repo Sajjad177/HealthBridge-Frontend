@@ -37,6 +37,7 @@ const Navbar = () => {
       <div className="flex items-center gap-4">
         {token ? (
           <div className="flex items-center gap-2 cursor-pointer group relative">
+            {/* add function there and turnary operator there */}
             <img
               src={assets.profile_pic}
               alt=""
