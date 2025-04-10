@@ -41,7 +41,7 @@ const AllApointment = () => {
           <p>$100</p>
 
           {/* after function add uncomment this if cancelled then show a delete icon for permanent delete */}
-
+          {/* check also same in admin dashboard */}
           {/* {item.isCancelled ? (
             <p className="text-red-500 text-xs font-medium">cancelled</p>
           ) : (
