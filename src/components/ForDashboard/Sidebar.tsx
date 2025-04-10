@@ -92,7 +92,7 @@ const Sidebar = () => {
           }
         >
           <img src={adminAssets.people_icon} alt="" />
-          <p className="hidden md:block">Doctor Profile</p>
+          <p className="hidden md:block">Profile</p>
         </NavLink>
       </ul>
     </div>
