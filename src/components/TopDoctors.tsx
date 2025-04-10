@@ -24,8 +24,16 @@ const TopDoctors = () => {
           >
             <img src={item.image} alt={item.name} className=" bg-blue-50" />
             <div className="p-4">
+              {/* add there some logic turnary operator to check whether the doctor is available or not */}
+
               <div className="flex items-center gap-2 text-sm text-green-500">
-                <span className="w-2 h-2 bg-green-500 rounded-full inline-block"></span>
+                {/* after logic uncomment this or copy from Doctor page also both are same  */}
+
+                {/* <span
+                  className={`w-2 h-2 ${
+                    item.available ? "bg-green-500" : "bg-gray-700"
+                  } rounded-full inline-block`}
+                ></span> */}
                 <p>Available</p>
               </div>
               <p className="font-semibold text-lg">{item.name}</p>

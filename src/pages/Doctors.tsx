@@ -72,9 +72,19 @@ const Doctors = () => {
               >
                 <img src={item.image} alt={item.name} className=" bg-blue-50" />
                 <div className="p-4">
-                  <div className="flex items-center  gap-2 text-sm text-green-500">
-                    <span className="w-2 h-2 bg-green-500 rounded-full inline-block"></span>
-                    <p>Available</p>
+                  <div
+                    className={`flex items-center  gap-2 text-sm ${
+                      item.available ? "text-green-500" : "text-gray-500"
+                    }`}
+                  >
+                    {/* add there some logic turnary operator to check whether the doctor is available or not */}
+
+                    <span
+                      className={`w-2 h-2 ${
+                        item.available ? "bg-green-500" : "bg-gray-700"
+                      } rounded-full inline-block`}
+                    ></span>
+                    <p>{item.available ? "Available" : "Unavailable"}</p>
                   </div>
                   <p className="font-semibold text-lg">{item.name}</p>
                   <p className="text-gray-500 text-sm">{item.speciality}</p>
