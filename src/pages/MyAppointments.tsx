@@ -29,6 +29,10 @@ const MyAppointments = () => {
             </div>
             <div></div>
             <div className="flex flex-col gap-2 justify-end">
+
+          {/* when you do it check the time is 15:37:00 for the button  */}
+
+
               {/* {!item.isCancelled && (
                 <button className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border border-stone-500 rounded cursor-pointer hover:bg-[#5f5fff] hover:text-white transition-all duration-300 ease-in-out">
                   Pay Online
