@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router-dom";
 import { adminAssets } from "../../assets/assets_admin/adminAssets";
 
 const DasNavbar = () => {
+  const navigate = useNavigate();
   return (
     <div className="flex justify-between items-center px-4 sm:px-10 py-3 border-b bg-white">
       <div className="flex items-center gap-2 text-xs">
@@ -8,6 +10,7 @@ const DasNavbar = () => {
           src={adminAssets.admin_logo}
           alt=""
           className="w-36 sm:w-40 cursor-pointer"
+          onClick={() => navigate("/")}
         />
         {/* add there turnary operator in role admin or doctor */}
         <p className="border px-2.5 rounded-full border-gray-500 text-gray-700">

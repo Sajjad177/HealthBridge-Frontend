@@ -46,6 +46,17 @@ const Navbar = () => {
             <img src={assets.dropdown_icon} alt="" className="w-2.5 " />
             <div className="absolute top-0 right-0 pt-14 text-base font-medium text-gray-600 hidden group-hover:block">
               <div className="min-w-48 bg-stone-100 rounded flex flex-col gap-2 p-2">
+                {/* show there turnary operator if role is admin onClick=
+                {() => navigate("/dashboard")} or role is doctor then onClick=
+                {() => navigate("/dashboard/doc")} */}
+
+                {/* role is doctor and admin then show this only */}
+                <p
+                  onClick={() => navigate("/dashboard")}
+                  className="hover:text-black cursor-pointer"
+                >
+                  Dashboard
+                </p>
                 <p
                   onClick={() => navigate("/my-profile")}
                   className="hover:text-black cursor-pointer"
