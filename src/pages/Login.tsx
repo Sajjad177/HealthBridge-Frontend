@@ -2,6 +2,10 @@ import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useLoginUserMutation } from "../redux/features/auth/authApi";
+import { verifyToken } from "../utils/verifyToken";
+import { useAppDispatch } from "../redux/hook";
+import { setUser } from "../redux/features/auth/authSlice";
+import { toast } from "sonner";
 
 type LoginFormInputs = {
   name?: string;
@@ -14,10 +18,12 @@ const Login = () => {
   const [state, setState] = useState("Sign Up");
 
   const [loginUser] = useLoginUserMutation();
+  const dispatch = useAppDispatch();
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<LoginFormInputs>();
 
@@ -28,10 +34,24 @@ const Login = () => {
         console.log("Sign Up Data:", data);
       } else {
         const { email, password } = data;
-        console.log("Login Data:", { email, password });
+        const result = await loginUser({ email, password }).unwrap();
+        const user = verifyToken(result.data.token);
+        console.log(result);
+
+        dispatch(
+          setUser({
+            user: user,
+            token: result.data.token,
+          })
+        );
+
+        toast.success("Login successful");
+        navigate("/dashboard");
+        reset();
       }
     } catch (error) {
       console.log(error);
+      toast.error("Something went wrong");
     }
   };
 
