@@ -46,7 +46,11 @@ const Login = () => {
         );
 
         toast.success("Login successful");
-        navigate("/dashboard");
+        if (user.role === "admin") {
+          navigate("/dashboard");
+        } else {
+          navigate("/");
+        }
         reset();
       }
     } catch (error) {

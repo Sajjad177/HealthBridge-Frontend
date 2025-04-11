@@ -61,40 +61,38 @@ const Navbar = () => {
             <img src={assets.dropdown_icon} alt="" className="w-2.5 " />
             <div className="absolute top-0 right-0 pt-14 text-base font-medium text-gray-600 hidden group-hover:block">
               <div className="min-w-48 bg-stone-100 rounded flex flex-col gap-2 p-2">
-                {/* show there turnary operator if role is admin onClick=
-                {() => navigate("/dashboard")} or role is doctor then onClick=
-                {() => navigate("/dashboard/doc")} */}
-
-                {/* role is doctor and admin then show this only */}
-                {user && user.role === "admin" ? (
+                {user && (user.role === "admin" || user.role === "doctor") && (
                   <p
-                    onClick={() => navigate("/dashboard")}
-                    className="hover:text-black cursor-pointer"
-                  >
-                    Dashboard
-                  </p>
-                ) : (
-                  <p
-                    onClick={() => navigate("/dashboard/doc")}
+                    onClick={() =>
+                      user.role === "admin"
+                        ? navigate("/dashboard")
+                        : navigate("/dashboard/doc")
+                    }
                     className="hover:text-black cursor-pointer"
                   >
                     Dashboard
                   </p>
                 )}
+
+                {user && user.role === "user" ? (
+                  <div>
+                    <p
+                      onClick={() => navigate("/my-profile")}
+                      className="hover:text-black cursor-pointer"
+                    >
+                      My Profile
+                    </p>
+                    <p
+                      onClick={() => navigate("/my-appointments")}
+                      className="hover:text-black cursor-pointer"
+                    >
+                      My Appointments
+                    </p>
+                  </div>
+                ) : (
+                  ""
+                )}
                 <p
-                  onClick={() => navigate("/my-profile")}
-                  className="hover:text-black cursor-pointer"
-                >
-                  My Profile
-                </p>
-                <p
-                  onClick={() => navigate("/my-appointments")}
-                  className="hover:text-black cursor-pointer"
-                >
-                  My Appointments
-                </p>
-                <p
-                  // onClick={() => setToken(false)}
                   onClick={handleLogout}
                   className=" text-red-500 hover:text-red-600 cursor-pointer"
                 >
