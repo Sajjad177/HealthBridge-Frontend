@@ -1,11 +1,20 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets_frontend/assets";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { logOut } from "../redux/features/auth/authSlice";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
   const [token, setToken] = useState(true);
+
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logOut());
+    navigate("/login");
+  };
 
   return (
     <nav className="flex items-center justify-between py-4 px-6 bg-white mb-5 border-b border-b-gray-400">
@@ -70,7 +79,8 @@ const Navbar = () => {
                   My Appointments
                 </p>
                 <p
-                  onClick={() => setToken(false)}
+                  // onClick={() => setToken(false)}
+                  onClick={handleLogout}
                   className=" text-red-500 hover:text-red-600 cursor-pointer"
                 >
                   Logout

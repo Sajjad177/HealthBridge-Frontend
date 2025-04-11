@@ -1,17 +1,50 @@
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useDoctorLoginMutation } from "../redux/features/auth/authApi";
+import { toast } from "sonner";
+import { verifyToken } from "../utils/verifyToken";
+import { setUser } from "../redux/features/auth/authSlice";
+import { useAppDispatch } from "../redux/hook";
+
+type LoginFormInputs = {
+  email: string;
+  password: string;
+};
 
 const DoctorLogin = () => {
   const navigate = useNavigate();
 
+  const [doctorLogin] = useDoctorLoginMutation();
+  const dispatch = useAppDispatch();
+
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
-  } = useForm();
+  } = useForm<LoginFormInputs>();
 
-  const onSubmit = (data) => {
-    console.log("Form Data:", data);
+  const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
+    try {
+      const { email, password } = data;
+      const result = await doctorLogin({ email, password }).unwrap();
+      const user = verifyToken(result.data.token);
+      console.log(result);
+
+      dispatch(
+        setUser({
+          user: user,
+          token: result.data.token,
+        })
+      );
+
+      toast.success("Login successful");
+      navigate("/dashboard");
+      reset();
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    }
   };
 
   return (
@@ -27,7 +60,7 @@ const DoctorLogin = () => {
           <input
             type="email"
             {...register("email", { required: "Email is required" })}
-            className="border border-zinc-300 rounded p-2 w-full mt-1 focus:ring-2 focus:ring-blue-500"
+            className="border border-zinc-300 rounded p-2 w-full mt-1"
           />
           {errors.email && (
             <p className="text-red-500 text-xs mt-1">
@@ -41,7 +74,7 @@ const DoctorLogin = () => {
           <input
             type="password"
             {...register("password", { required: "Password is required" })}
-            className="border border-zinc-300 rounded p-2 w-full mt-1 focus:ring-2 focus:ring-blue-500"
+            className="border border-zinc-300 rounded p-2 w-full mt-1"
           />
           {errors.password && (
             <p className="text-red-500 text-xs mt-1">
