@@ -1,19 +1,38 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useLoginUserMutation } from "../redux/features/auth/authApi";
+
+type LoginFormInputs = {
+  name?: string;
+  email: string;
+  password: string;
+};
 
 const Login = () => {
   const navigate = useNavigate();
   const [state, setState] = useState("Sign Up");
 
+  const [loginUser] = useLoginUserMutation();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<LoginFormInputs>();
 
-  const onSubmit = (data) => {
-    console.log("Form Data:", data);
+  const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
+    try {
+      //------- 1st for [sign up] 2nd for [login] --------------
+      if (state === "Sign Up") {
+        console.log("Sign Up Data:", data);
+      } else {
+        const { email, password } = data;
+        console.log("Login Data:", { email, password });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -35,8 +54,10 @@ const Login = () => {
             <p className="font-medium">Full Name</p>
             <input
               type="text"
-              {...register("name", { required: "Full Name is required" })}
-              className="border border-zinc-300 rounded p-2 w-full mt-1 focus:ring-2 focus:ring-blue-500"
+              {...register("name", {
+                required: state === "Sign Up" ? "Full Name is required" : false,
+              })}
+              className="border border-zinc-300 rounded p-2 w-full mt-1"
             />
             {errors.name && (
               <p className="text-red-500 text-xs mt-1">
@@ -51,7 +72,7 @@ const Login = () => {
           <input
             type="email"
             {...register("email", { required: "Email is required" })}
-            className="border border-zinc-300 rounded p-2 w-full mt-1 focus:ring-2 focus:ring-blue-500"
+            className="border border-zinc-300 rounded p-2 w-full mt-1"
           />
           {errors.email && (
             <p className="text-red-500 text-xs mt-1">
@@ -65,7 +86,7 @@ const Login = () => {
           <input
             type="password"
             {...register("password", { required: "Password is required" })}
-            className="border border-zinc-300 rounded p-2 w-full mt-1 focus:ring-2 focus:ring-blue-500"
+            className="border border-zinc-300 rounded p-2 w-full mt-1"
           />
           {errors.password && (
             <p className="text-red-500 text-xs mt-1">

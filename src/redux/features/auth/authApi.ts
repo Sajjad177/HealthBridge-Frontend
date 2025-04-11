@@ -10,8 +10,15 @@ const authApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["User"],
     }),
+    doctorLogin: builder.mutation({
+      query: (doctorData) => ({
+        url: "/auth/login-doctor",
+        method: "POST",
+        body: doctorData,
+      }),
+      invalidatesTags: ["Doctor"],
+    }),
   }),
 });
 
-
-export const { useLoginUserMutation } = authApi;
+export const { useLoginUserMutation, useDoctorLoginMutation } = authApi;
