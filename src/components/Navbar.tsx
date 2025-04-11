@@ -2,14 +2,20 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets_frontend/assets";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { logOut } from "../redux/features/auth/authSlice";
+import {
+  logOut,
+  selectCurrentUser,
+  useCurrentToken,
+} from "../redux/features/auth/authSlice";
+import { useAppSelector } from "../redux/hook";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
-  const [token, setToken] = useState(true);
 
   const dispatch = useDispatch();
+  const user = useAppSelector(selectCurrentUser);
+  const userToken = useAppSelector(useCurrentToken);
 
   const handleLogout = () => {
     dispatch(logOut());
@@ -44,7 +50,7 @@ const Navbar = () => {
       </ul>
       {/* create account and drop down */}
       <div className="flex items-center gap-4">
-        {token ? (
+        {userToken ? (
           <div className="flex items-center gap-2 cursor-pointer group relative">
             {/* add function there and turnary operator there */}
             <img
@@ -60,12 +66,21 @@ const Navbar = () => {
                 {() => navigate("/dashboard/doc")} */}
 
                 {/* role is doctor and admin then show this only */}
-                <p
-                  onClick={() => navigate("/dashboard")}
-                  className="hover:text-black cursor-pointer"
-                >
-                  Dashboard
-                </p>
+                {user && user.role === "admin" ? (
+                  <p
+                    onClick={() => navigate("/dashboard")}
+                    className="hover:text-black cursor-pointer"
+                  >
+                    Dashboard
+                  </p>
+                ) : (
+                  <p
+                    onClick={() => navigate("/dashboard/doc")}
+                    className="hover:text-black cursor-pointer"
+                  >
+                    Dashboard
+                  </p>
+                )}
                 <p
                   onClick={() => navigate("/my-profile")}
                   className="hover:text-black cursor-pointer"
