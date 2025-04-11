@@ -14,7 +14,7 @@ createRoot(document.getElementById("root")!).render(
       <Toaster
         position="top-right"
         richColors
-        toastOptions={{ duration: 500 }}
+        toastOptions={{ duration: 1000 }}
       />
     </PersistGate>
   </Provider>

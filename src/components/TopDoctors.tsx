@@ -1,8 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { doctors } from "../assets/assets_frontend/assets";
+import { useGetAllDoctorsQuery } from "../redux/features/doctor/doctorManagement";
 
 const TopDoctors = () => {
   const navigate = useNavigate();
+  const { data } = useGetAllDoctorsQuery("");
+  const doctors = data?.data;
+
 
   return (
     <div className="flex flex-col items-center gap-4 my-16 text-gray-900 w-full px-4">
@@ -13,7 +16,7 @@ const TopDoctors = () => {
 
       {/* Doctor Cards Grid */}
       <div className="grid grid-cols-auto gap-6 pt-5 w-full ">
-        {doctors.slice(0, 10).map((item, index) => (
+        {doctors?.slice(0, 10)?.map((item: any, index: number) => (
           <div
             key={index}
             onClick={() => {
@@ -26,14 +29,18 @@ const TopDoctors = () => {
             <div className="p-4">
               {/* add there some logic turnary operator to check whether the doctor is available or not */}
 
-              <div className="flex items-center gap-2 text-sm text-green-500">
+              <div
+                className={`flex items-center gap-2 text-sm ${
+                  item.available ? "text-green-500" : "text-gray-500"
+                }`}
+              >
                 {/* after logic uncomment this or copy from Doctor page also both are same  */}
 
-                {/* <span
+                <span
                   className={`w-2 h-2 ${
                     item.available ? "bg-green-500" : "bg-gray-700"
                   } rounded-full inline-block`}
-                ></span> */}
+                ></span>
                 <p>Available</p>
               </div>
               <p className="font-semibold text-lg">{item.name}</p>
