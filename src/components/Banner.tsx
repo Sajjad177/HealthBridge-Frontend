@@ -1,8 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets_frontend/assets";
+import { useAppSelector } from "../redux/hook";
+import { selectCurrentUser } from "../redux/features/auth/authSlice";
 
 const Banner = () => {
   const navigate = useNavigate();
+  const user = useAppSelector(selectCurrentUser);
 
   return (
     <div className="flex bg-primary rounded-lg px-6 sm:px-10 md:px-14 lg:px-12 my-20 md:mx-10">
@@ -12,15 +15,27 @@ const Banner = () => {
           <p>Book Appointment </p>
           <p className="mt-2">With 100+ Trusted Doctors</p>
         </div>
-        <button
-          onClick={() => {
-            navigate("/login");
-            window.scrollTo(0, 0);
-          }}
-          className="flex items-center gap-2 bg-white font-semibold px-8 py-3 rounded-full text-gray-600 text-sm mt-5 cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out"
-        >
-          Create Account
-        </button>
+        {user ? (
+          <button
+            onClick={() => {
+              navigate("/doctors");
+              window.scrollTo(0, 0);
+            }}
+            className="flex items-center gap-2 bg-white font-semibold px-8 py-3 rounded-full text-gray-600 text-sm mt-5 cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out"
+          >
+            Explore Doctors
+          </button>
+        ) : (
+          <button
+            onClick={() => {
+              navigate("/login");
+              window.scrollTo(0, 0);
+            }}
+            className="flex items-center gap-2 bg-white font-semibold px-8 py-3 rounded-full text-gray-600 text-sm mt-5 cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out"
+          >
+            Create Account
+          </button>
+        )}
       </div>
 
       {/* ------------- right side ------------- */}

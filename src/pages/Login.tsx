@@ -6,6 +6,7 @@ import { verifyToken } from "../utils/verifyToken";
 import { useAppDispatch } from "../redux/hook";
 import { setUser } from "../redux/features/auth/authSlice";
 import { toast } from "sonner";
+import { useRegisterUserMutation } from "../redux/features/user/userManagement";
 
 type LoginFormInputs = {
   name?: string;
@@ -18,6 +19,7 @@ const Login = () => {
   const [state, setState] = useState("Sign Up");
 
   const [loginUser] = useLoginUserMutation();
+  const [registerUser] = useRegisterUserMutation();
   const dispatch = useAppDispatch();
 
   const {
@@ -31,12 +33,27 @@ const Login = () => {
     try {
       //------- 1st for [sign up] 2nd for [login] --------------
       if (state === "Sign Up") {
-        console.log("Sign Up Data:", data);
+        const { name, email, password } = data;
+
+        const result = await registerUser({ name, email, password }).unwrap();
+        console.log(result);
+        const user = verifyToken(result.data.token);
+
+        dispatch(
+          setUser({
+            user: user,
+            token: result.data.token,
+          })
+        );
+
+        toast.success("Registration successful");
+        navigate("/");
+        reset();
       } else {
         const { email, password } = data;
         const result = await loginUser({ email, password }).unwrap();
         const user = verifyToken(result.data.token);
-        console.log(result);
+        // console.log(result);
 
         dispatch(
           setUser({
