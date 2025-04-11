@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [state, setState] = useState("Sign Up");
 
   const {
@@ -37,7 +39,9 @@ const Login = () => {
               className="border border-zinc-300 rounded p-2 w-full mt-1 focus:ring-2 focus:ring-blue-500"
             />
             {errors.name && (
-              <p className="text-red-500 text-xs mt-1">{errors.name.message as string}</p>
+              <p className="text-red-500 text-xs mt-1">
+                {errors.name.message as string}
+              </p>
             )}
           </div>
         )}
@@ -50,7 +54,9 @@ const Login = () => {
             className="border border-zinc-300 rounded p-2 w-full mt-1 focus:ring-2 focus:ring-blue-500"
           />
           {errors.email && (
-            <p className="text-red-500 text-xs mt-1">{errors.email.message as string}</p>
+            <p className="text-red-500 text-xs mt-1">
+              {errors.email.message as string}
+            </p>
           )}
         </div>
 
@@ -86,15 +92,25 @@ const Login = () => {
             </span>
           </p>
         ) : (
-          <p>
-            Create a new account?{" "}
-            <span
-              onClick={() => setState("Sign Up")}
-              className="text-blue-600 underline cursor-pointer"
-            >
-              Click here
-            </span>
-          </p>
+          <div className="flex justify-between">
+            <p>
+              Create a new account?{" "}
+              <span
+                onClick={() => setState("Sign Up")}
+                className="text-blue-600 underline cursor-pointer"
+              >
+                Click here
+              </span>
+            </p>
+            <p>
+              <span
+                onClick={() => navigate("/doctor-login")}
+                className="text-blue-600 underline cursor-pointer"
+              >
+                For Doctors
+              </span>
+            </p>
+          </div>
         )}
       </div>
     </form>

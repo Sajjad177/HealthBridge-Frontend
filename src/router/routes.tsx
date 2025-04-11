@@ -10,6 +10,7 @@ import Appointment from "../pages/Appointment";
 import MainLayout from "../App";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import dashbardRouters from "./dashboardRoutes";
+import DoctorLogin from "../pages/DoctorLogin";
 
 const router = createBrowserRouter([
   {
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/doctor-login",
+    element: <DoctorLogin />,
   },
 ]);
 
