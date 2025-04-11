@@ -2,6 +2,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { adminAssets } from "../../../assets/assets_admin/adminAssets";
 import { useAddDoctorMutation } from "../../../redux/features/doctor/doctorManagement";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 type addDoctorForm = {
   name: string;
@@ -18,24 +20,32 @@ type addDoctorForm = {
 };
 
 const AddDoctor = () => {
-  const { register, handleSubmit } = useForm<addDoctorForm>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm<addDoctorForm>();
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const navigate = useNavigate();
   const [addDoctor] = useAddDoctorMutation();
 
   const onSubmit: SubmitHandler<addDoctorForm> = async (data) => {
     try {
-      console.log(data);
       const formData = new FormData();
 
       formData.append("data", JSON.stringify(data));
       formData.append("file", data.image!);
 
       const res = await addDoctor(formData).unwrap();
-      console.log(res);
-
       if (res.error) {
         toast.error(res.error);
       } else {
         toast.success(res.message);
+        reset();
+        setImagePreview(null);
+        navigate("/dashboard/doctor-list");
       }
     } catch (error) {
       console.log(error);
@@ -46,7 +56,8 @@ const AddDoctor = () => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      register("image").onChange({ target: { value: file } });
+      setValue("image", file); // Set to react-hook-form
+      setImagePreview(URL.createObjectURL(file)); // Set preview
     }
   };
 
@@ -57,9 +68,9 @@ const AddDoctor = () => {
         <div className="flex items-center gap-4 mb-8 text-gray-500">
           <label htmlFor="doc-img">
             <img
-              src={adminAssets.upload_area}
-              alt=""
-              className="cursor-pointer w-16 bg-gray-100 rounded-full"
+              src={imagePreview || adminAssets.upload_area}
+              alt="Doctor Preview"
+              className="cursor-pointer w-16 h-16 object-cover bg-gray-100 rounded-full"
             />
           </label>
           <input type="file" id="doc-img" onChange={handleImageChange} hidden />
@@ -76,8 +87,11 @@ const AddDoctor = () => {
                 type="text"
                 placeholder="Name"
                 className="add-doctor-input"
-                {...register("name")}
+                {...register("name", { required: "Doctor name is required" })}
               />
+              {errors.name && (
+                <span className="text-red-500">{errors.name.message}</span>
+              )}
             </div>
             <div className="add-doctor-div">
               <p>Doctor Email</p>
@@ -85,8 +99,11 @@ const AddDoctor = () => {
                 type="email"
                 placeholder="Email"
                 className="add-doctor-input"
-                {...register("email")}
+                {...register("email", { required: "Email is required" })}
               />
+              {errors.email && (
+                <span className="text-red-500">{errors.email.message}</span>
+              )}
             </div>
             <div className="add-doctor-div">
               <p>Doctor Password</p>
@@ -94,19 +111,32 @@ const AddDoctor = () => {
                 type="password"
                 placeholder="Password"
                 className="add-doctor-input"
-                {...register("password")}
+                {...register("password", { required: "Password is required" })}
               />
+              {errors.password && (
+                <span className="text-red-500">{errors.password.message}</span>
+              )}
             </div>
 
             <div className="add-doctor-div">
               <p>Experience</p>
-              <select className="add-doctor-input" {...register("experience")}>
+              <select
+                className="add-doctor-input"
+                {...register("experience", {
+                  required: "Experience is required",
+                })}
+              >
                 {Array.from({ length: 10 }, (_, i) => (
                   <option key={i + 1} value={`${i + 1} year`}>
                     {i + 1} year
                   </option>
                 ))}
               </select>
+              {errors.experience && (
+                <span className="text-red-500">
+                  {errors.experience.message}
+                </span>
+              )}
             </div>
 
             <div className="add-doctor-div">
@@ -115,15 +145,23 @@ const AddDoctor = () => {
                 type="number"
                 placeholder="Fee"
                 className="add-doctor-input"
-                {...register("fees")}
+                {...register("fees", { required: "Fee is required" })}
               />
+              {errors.fees && (
+                <span className="text-red-500">{errors.fees.message}</span>
+              )}
             </div>
           </div>
 
           <div className="w-full lg:flex-1 flex flex-col gap-4">
             <div className="add-doctor-div">
               <p>Speciality</p>
-              <select className="add-doctor-input" {...register("speciality")}>
+              <select
+                className="add-doctor-input"
+                {...register("speciality", {
+                  required: "Speciality is required",
+                })}
+              >
                 <option value="General physician">General physician</option>
                 <option value="Gynecologist">Gynecologist</option>
                 <option value="Dermatologist">Dermatologist</option>
@@ -131,6 +169,11 @@ const AddDoctor = () => {
                 <option value="Neurologist">Neurologist</option>
                 <option value="Gastroenterologist">Gastroenterologist</option>
               </select>
+              {errors.speciality && (
+                <span className="text-red-500">
+                  {errors.speciality.message}
+                </span>
+              )}
             </div>
             <div className="add-doctor-div">
               <p>Education</p>
@@ -138,8 +181,13 @@ const AddDoctor = () => {
                 type="text"
                 placeholder="Education"
                 className="add-doctor-input"
-                {...register("education")}
+                {...register("education", {
+                  required: "Education is required",
+                })}
               />
+              {errors.education && (
+                <span className="text-red-500">{errors.education.message}</span>
+              )}
             </div>
             <div className="add-doctor-div">
               <p>Degree</p>
@@ -147,8 +195,11 @@ const AddDoctor = () => {
                 type="text"
                 placeholder="degree"
                 className="add-doctor-input"
-                {...register("degree")}
+                {...register("degree", { required: "Degree is required" })}
               />
+              {errors.degree && (
+                <span className="text-red-500">{errors.degree.message}</span>
+              )}
             </div>
             <div className="add-doctor-div">
               <p>Address</p>
@@ -156,8 +207,11 @@ const AddDoctor = () => {
                 type="text"
                 placeholder="Address"
                 className="add-doctor-input"
-                {...register("address")}
+                {...register("address", { required: "Address is required" })}
               />
+              {errors.address && (
+                <span className="text-red-500">{errors.address.message}</span>
+              )}
             </div>
           </div>
         </div>
@@ -167,8 +221,11 @@ const AddDoctor = () => {
             rows={5}
             placeholder="Write about doctor"
             className="w-full border border-gray-200 rounded p-2"
-            {...register("about")}
+            {...register("about", { required: "About is required" })}
           />
+          {errors.about && (
+            <span className="text-red-500">{errors.about.message}</span>
+          )}
         </div>
         <button
           type="submit"
