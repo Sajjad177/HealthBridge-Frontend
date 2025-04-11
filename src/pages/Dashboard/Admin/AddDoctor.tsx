@@ -1,12 +1,53 @@
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { adminAssets } from "../../../assets/assets_admin/adminAssets";
+import { useAddDoctorMutation } from "../../../redux/features/doctor/doctorManagement";
+import { toast } from "sonner";
+
+type addDoctorForm = {
+  name: string;
+  email: string;
+  password: string;
+  image: File | null;
+  speciality: string;
+  experience: string;
+  about: string;
+  fees: number;
+  address: string;
+  education: string;
+  degree: string;
+};
 
 const AddDoctor = () => {
-  const { register, handleSubmit } = useForm();
-  //* show error for image not selected
+  const { register, handleSubmit } = useForm<addDoctorForm>();
+  const [addDoctor] = useAddDoctorMutation();
 
-  const onSubmit = (data) => {
-    console.log("Doctor Form Data:", data);
+  const onSubmit: SubmitHandler<addDoctorForm> = async (data) => {
+    try {
+      console.log(data);
+      const formData = new FormData();
+
+      formData.append("data", JSON.stringify(data));
+      formData.append("file", data.image!);
+
+      const res = await addDoctor(formData).unwrap();
+      console.log(res);
+
+      if (res.error) {
+        toast.error(res.error);
+      } else {
+        toast.success(res.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    }
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      register("image").onChange({ target: { value: file } });
+    }
   };
 
   return (
@@ -21,7 +62,7 @@ const AddDoctor = () => {
               className="cursor-pointer w-16 bg-gray-100 rounded-full"
             />
           </label>
-          <input type="file" id="doc-img" {...register("doctorImage")} hidden />
+          <input type="file" id="doc-img" onChange={handleImageChange} hidden />
           <p>
             Upload Doctor <br /> Picture
           </p>
@@ -74,7 +115,7 @@ const AddDoctor = () => {
                 type="number"
                 placeholder="Fee"
                 className="add-doctor-input"
-                {...register("fee")}
+                {...register("fees")}
               />
             </div>
           </div>
@@ -98,6 +139,15 @@ const AddDoctor = () => {
                 placeholder="Education"
                 className="add-doctor-input"
                 {...register("education")}
+              />
+            </div>
+            <div className="add-doctor-div">
+              <p>Degree</p>
+              <input
+                type="text"
+                placeholder="degree"
+                className="add-doctor-input"
+                {...register("degree")}
               />
             </div>
             <div className="add-doctor-div">

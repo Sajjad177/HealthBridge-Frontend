@@ -9,7 +9,16 @@ const doctorManagement = baseApi.injectEndpoints({
       }),
       providesTags: ["Doctor"],
     }),
+    addDoctor: builder.mutation({
+      query: (data) => ({
+        url: "/doctor/add-doctor",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Doctor"],
+    }),
   }),
 });
 
-export const { useGetAllDoctorsQuery } = doctorManagement;
+
+export const { useGetAllDoctorsQuery, useAddDoctorMutation } = doctorManagement;

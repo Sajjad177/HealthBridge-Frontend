@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { doctors } from "../assets/assets_frontend/assets";
+import { useGetAllDoctorsQuery } from "../redux/features/doctor/doctorManagement";
 
 const Doctors = () => {
   const { speciality } = useParams();
@@ -8,9 +8,12 @@ const Doctors = () => {
   const [filterDoc, setFilterDoc] = useState([]);
   const [showFilter, setShowFilter] = useState(false);
 
+  const { data } = useGetAllDoctorsQuery("");
+    const doctors = data?.data;
+
   const filteredDoctors = useMemo(() => {
     return speciality
-      ? doctors.filter((doc) => doc.speciality === speciality)
+      ? doctors?.filter((doc: any) => doc.speciality === speciality)
       : doctors;
   }, [speciality]);
 
@@ -63,8 +66,8 @@ const Doctors = () => {
 
         {/* -------- Doctors List -------- */}
         <div className="w-full grid grid-cols-auto gap-6">
-          {filterDoc.length > 0 ? (
-            filterDoc.map((item: any) => (
+          {filterDoc?.length > 0 ? (
+            filterDoc?.map((item: any) => (
               <div
                 key={item._id}
                 onClick={() => navigate(`/appointment/${item._id}`)}
