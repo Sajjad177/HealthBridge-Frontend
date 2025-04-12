@@ -17,8 +17,19 @@ const doctorManagement = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Doctor"],
     }),
+    toggleAvability: builder.mutation({
+      query: ({ id, available }) => ({
+        url: `/doctor/available/${id}`,
+        method: "PUT",
+        body: available,
+      }),
+      invalidatesTags: ["Doctor"],
+    }),
   }),
 });
 
-
-export const { useGetAllDoctorsQuery, useAddDoctorMutation } = doctorManagement;
+export const {
+  useGetAllDoctorsQuery,
+  useAddDoctorMutation,
+  useToggleAvabilityMutation,
+} = doctorManagement;
