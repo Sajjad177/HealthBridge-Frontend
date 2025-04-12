@@ -10,7 +10,26 @@ const userManagement = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["User"],
     }),
+    updateUserProfile: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/user/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["User"],
+    }),
+    getSingleUser: builder.query({
+      query: (id) => ({
+        url: `/user/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["User"],
+    }),
   }),
 });
 
-export const { useRegisterUserMutation } = userManagement;
+export const {
+  useRegisterUserMutation,
+  useUpdateUserProfileMutation,
+  useGetSingleUserQuery,
+} = userManagement;
