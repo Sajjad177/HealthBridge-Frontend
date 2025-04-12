@@ -4,7 +4,7 @@ const appointmentManagement = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllAppointments: builder.query({
       query: () => ({
-        url: "/appointment",
+        url: "/appointment/all",
         method: "GET",
       }),
       providesTags: ["Appointment"],

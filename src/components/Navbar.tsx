@@ -8,6 +8,7 @@ import {
   useCurrentToken,
 } from "../redux/features/auth/authSlice";
 import { useAppSelector } from "../redux/hook";
+import { useGetSingleUserQuery } from "../redux/features/user/userManagement";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -16,6 +17,9 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const user = useAppSelector(selectCurrentUser);
   const userToken = useAppSelector(useCurrentToken);
+
+  const { data } = useGetSingleUserQuery(user?.userId);
+  const profileImage = data?.data?.image;
 
   const handleLogout = () => {
     dispatch(logOut());
@@ -52,9 +56,8 @@ const Navbar = () => {
       <div className="flex items-center gap-4">
         {userToken ? (
           <div className="flex items-center gap-2 cursor-pointer group relative">
-            {/* add function there and turnary operator there */}
             <img
-              src={assets.profile_pic}
+              src={profileImage || assets.profile_pic}
               alt=""
               className="w-9 h-9 rounded-full border-2 border-gray-300"
             />
@@ -77,12 +80,6 @@ const Navbar = () => {
                 {user && user.role === "user" ? (
                   <div>
                     <p
-                      onClick={() => navigate("/my-profile")}
-                      className="hover:text-black cursor-pointer"
-                    >
-                      My Profile
-                    </p>
-                    <p
                       onClick={() => navigate("/my-appointments")}
                       className="hover:text-black cursor-pointer"
                     >
@@ -92,6 +89,12 @@ const Navbar = () => {
                 ) : (
                   ""
                 )}
+                <p
+                  onClick={() => navigate("/my-profile")}
+                  className="hover:text-black cursor-pointer"
+                >
+                  My Profile
+                </p>
                 <p
                   onClick={handleLogout}
                   className=" text-red-500 hover:text-red-600 cursor-pointer"

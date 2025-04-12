@@ -1,7 +1,36 @@
+import { toast } from "sonner";
 import { adminAssets } from "../../../assets/assets_admin/adminAssets";
-import { assets } from "../../../assets/assets_frontend/assets";
+import {
+  useCancleAppointmentMutation,
+  useGetAllAppointmentsQuery,
+} from "../../../redux/features/appointment/appointmentManagement";
+import { calculateAge } from "../../../utils/global";
 
 const AllApointment = () => {
+  const { data } = useGetAllAppointmentsQuery("");
+  const appointments = data?.data;
+  // console.log(data);
+
+  const [cancleAppointment] = useCancleAppointmentMutation();
+
+  const handleCancel = async (id: string, cancelledStatus: boolean) => {
+    try {
+      const res = await cancleAppointment({
+        id,
+        data: { cancelled: !cancelledStatus },
+      }).unwrap();
+
+      if (res.error) {
+        toast.error(res.error);
+      } else {
+        toast.success(res.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    }
+  };
+
   return (
     <div className="w-full max-w-6xl m-5">
       <p className="text-lg font-semibold mb-3">All Apointment</p>
@@ -17,47 +46,51 @@ const AllApointment = () => {
         </div>
 
         {/* show this div in map function */}
-        <div className="flex flex-wrap justify-between max-sm:gap-2 sm:grid sm:grid-cols-[0.5fr_3fr_1fr_3fr_3fr_1fr_1fr] items-center text-gray-600 py-3 px-5 border-b border-gray-100 hover:bg-gray-50">
-          {/* <p>{index+1}</p> */}
-          <p className="max-sm:hidden">1</p>
-          <div className="flex items-center gap-2">
-            <img
-              src={assets.about_image}
-              alt=""
-              className="w-10 rounded-full"
-            />{" "}
-            <p>John Doe</p>
-          </div>
-          <p className="max-sm:hidden">25</p>
-          <p>1/1/2023, 10:00 AM</p>
-          <div className="flex items-center gap-2">
-            <img
-              src={assets.about_image}
-              alt=""
-              className="w-10 rounded-full bg-gray-200"
-            />{" "}
-            <p>Dr. John Doe</p>
-          </div>
-          <p>$100</p>
+        {appointments?.map((item: any, index: number) => (
+          <div
+            key={index}
+            className="flex flex-wrap justify-between max-sm:gap-2 sm:grid sm:grid-cols-[0.5fr_3fr_1fr_3fr_3fr_1fr_1fr] items-center text-gray-600 py-3 px-5 border-b border-gray-100 hover:bg-gray-50"
+          >
+            <p className="max-sm:hidden">{index + 1}</p>
 
-          {/* after function add uncomment this if cancelled then show a delete icon for permanent delete */}
-          {/* check also same in admin dashboard */}
-          {/* {item.isCancelled ? (
-            <p className="text-red-500 text-xs font-medium">cancelled</p>
-          ) : (
-            <img
-              src={adminAssets.cancel_icon}
-              alt=""
-              className="w-10 cursor-pointer"
-            />
-          )} */}
-          <img
-            src={adminAssets.cancel_icon}
-            alt=""
-            className="w-10 cursor-pointer"
-          />
-          {/* when click the cancle button appointment will canceled. [cancelled == true] */}
-        </div>
+            <div className="flex items-center gap-2">
+              <img
+                src={item?.docId?.image}
+                alt=""
+                className="w-10 rounded-full"
+              />{" "}
+              <p>{item.docId.name}</p>
+            </div>
+            <p className="max-sm:hidden">
+              {calculateAge(item.userId.dateOfBirth)}
+            </p>
+            <p>
+              {item.slotDate} - {item.slotTime}
+            </p>
+            <div className="flex items-center gap-2">
+              <img
+                src={item?.userId?.image}
+                alt=""
+                className="w-10 rounded-full bg-gray-200"
+              />{" "}
+              <p>{item.userId?.name}</p>
+            </div>
+            <p>{item.docId.fees}</p>
+
+            {item.cancelled ? (
+              <p className="text-red-500 text-sm font-medium">cancelled</p>
+            ) : (
+              <img
+                onClick={() => handleCancel(item._id, item.cancelled)}
+                src={adminAssets.cancel_icon}
+                alt=""
+                className="w-10 cursor-pointer"
+              />
+            )}
+
+            {/* when click the cancle button appointment will canceled. [cancelled == true] */}
+          </div>
+        ))}
       </div>
     </div>
   );
