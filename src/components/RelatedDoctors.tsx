@@ -1,10 +1,18 @@
-import { useState } from "react";
-import { doctors } from "../assets/assets_frontend/assets";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const RelatedDoctors = ({ speciality, docId }) => {
+const RelatedDoctors = ({ speciality, docId, doctors } : any) => {
   const navigate = useNavigate();
-  const [relatedDoc, setRelatedDoc] = useState();
+  const [relatedDoc, setRelatedDoc] = useState([]);
+
+  useEffect(() => {
+    if (speciality) {
+      const filteredDoc = doctors.filter(
+        (doc: any) => doc.speciality === speciality && doc._id !== docId
+      );
+      setRelatedDoc(filteredDoc);
+    }
+  }, [doctors, speciality, docId]);
 
   return (
     <div className="flex flex-col items-center gap-4 my-16 text-gray-900 w-full px-4">
@@ -15,7 +23,7 @@ const RelatedDoctors = ({ speciality, docId }) => {
 
       {/* Doctor Cards Grid */}
       <div className="grid grid-cols-auto gap-6 pt-5 w-full ">
-        {doctors.slice(0, 5).map((item, index) => (
+        {relatedDoc.slice(0, 5).map((item: any, index: number) => (
           <div
             key={index}
             onClick={() => {

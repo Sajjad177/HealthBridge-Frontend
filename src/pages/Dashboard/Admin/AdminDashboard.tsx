@@ -1,13 +1,20 @@
 import { adminAssets } from "../../../assets/assets_admin/adminAssets";
+import { useGetAllDoctorsQuery } from "../../../redux/features/doctor/doctorManagement";
 
 const AdminDashboard = () => {
+  const { data } = useGetAllDoctorsQuery("");
+  const doctors = data?.data;
+
+
   return (
     <div className="m-5">
       <div className="flex flex-wrap gap-5">
         <div className="admnin-dashboard-card">
           <img className="w-14" src={adminAssets.doctor_icon} alt="" />
           <div>
-            <p className="text-xl font-semibold text-gray-600">2</p>
+            <p className="text-xl font-semibold text-gray-600">
+              {doctors?.length}
+            </p>
             <p className="text-gray-400">Doctors</p>
           </div>
         </div>
