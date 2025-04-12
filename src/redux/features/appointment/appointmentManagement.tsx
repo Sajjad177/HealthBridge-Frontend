@@ -17,8 +17,27 @@ const appointmentManagement = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Appointment"],
     }),
+    getUserOwnAppointments: builder.query({
+      query: (userId) => ({
+        url: `/appointment/${userId}`,
+        method: "GET",
+      }),
+      providesTags: ["Appointment"],
+    }),
+    cancleAppointment: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/appointment/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["Appointment"],
+    }),
   }),
 });
 
-export const { useGetAllAppointmentsQuery, useAddAppointmentMutation } =
-  appointmentManagement;
+export const {
+  useGetAllAppointmentsQuery,
+  useAddAppointmentMutation,
+  useGetUserOwnAppointmentsQuery,
+  useCancleAppointmentMutation,
+} = appointmentManagement;

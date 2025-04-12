@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { assets, currency, daysOfWeek } from "../assets/assets_frontend/assets";
 import { useEffect, useState } from "react";
 import RelatedDoctors from "../components/RelatedDoctors";
@@ -13,6 +13,7 @@ import { toast } from "sonner";
 
 const Appointment = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [docSlots, setDocSlots] = useState<any[][]>([]);
   const [slotIndex, setSlotIndex] = useState(0);
   const [slotTime, setSlotTime] = useState("");
@@ -99,6 +100,7 @@ const Appointment = () => {
       const res = await createAppointment(appointmentData).unwrap();
 
       toast.success(res?.message || "Appointment booked successfully.");
+      navigate("/my-appointments");
       setSlotTime(""); // Reset selected slot
       refetch(); // Refresh doctor data
     } catch (error: any) {
