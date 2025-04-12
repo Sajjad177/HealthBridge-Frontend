@@ -6,31 +6,34 @@ import {
   useGetAllDoctorsQuery,
   useGetSingleDoctorQuery,
 } from "../redux/features/doctor/doctorManagement";
+import { useAppSelector } from "../redux/hook";
+import { selectCurrentUser } from "../redux/features/auth/authSlice";
+import { useAddAppointmentMutation } from "../redux/features/appointment/appointmentManagement";
+import { toast } from "sonner";
 
 const Appointment = () => {
   const { id } = useParams();
-  // const [docInfo, setDocInfo] = useState(null);
-  const [docSlots, setDocSlots] = useState([]);
+  const [docSlots, setDocSlots] = useState<any[][]>([]);
   const [slotIndex, setSlotIndex] = useState(0);
   const [slotTime, setSlotTime] = useState("");
 
   const { data: allDoctorsData, isLoading } = useGetAllDoctorsQuery(undefined);
   const doctors = allDoctorsData?.data || [];
 
-  const { data: docData, isLoading: isDocLoading } =
-    useGetSingleDoctorQuery(id);
+  const {
+    data: docData,
+    isLoading: isDocLoading,
+    refetch,
+  } = useGetSingleDoctorQuery(id);
   const doctor = docData?.data;
 
-  // useEffect(() => {
-  //   if (doctor) {
-  //     setDocInfo(doctor);
-  //   }
-  // }, [doctor]);
+  const user = useAppSelector(selectCurrentUser);
+  const [createAppointment] = useAddAppointmentMutation();
 
   const getAvailableSlots = async () => {
     if (!doctor) return;
 
-    const slotsArray: any[] = [];
+    const slotsArray: any[][] = [];
     let today = new Date();
 
     for (let i = 0; i < 7; i++) {
@@ -74,6 +77,41 @@ const Appointment = () => {
     getAvailableSlots();
   }, [doctor]);
 
+  const handleAppointment = async () => {
+    try {
+      const selectedSlot = docSlots[slotIndex]?.find(
+        (slot: any) => slot.time === slotTime
+      );
+
+      if (!selectedSlot) {
+        toast.error("Please select a time slot.");
+        return;
+      }
+
+      const appointmentData = {
+        docId: doctor?._id,
+        userId: user?.userId,
+        amount: doctor?.fees,
+        slotDate: selectedSlot?.dateTime.toDateString(),
+        slotTime: selectedSlot?.time,
+      };
+
+      const res = await createAppointment(appointmentData).unwrap();
+
+      toast.success(res?.message || "Appointment booked successfully.");
+      setSlotTime(""); // Reset selected slot
+      refetch(); // Refresh doctor data
+    } catch (error: any) {
+      // Check for error structure
+      const errorMessage =
+        error?.data?.message ||
+        error?.data?.error?.message ||
+        "Something went wrong. Please try again.";
+
+      toast.error(errorMessage);
+    }
+  };
+
   if (isLoading || isDocLoading) {
     return <div>Loading...</div>;
   }
@@ -114,7 +152,7 @@ const Appointment = () => {
           <p className="text-gray-500 font-medium mt-4">
             Appointment Fee:{" "}
             <span className="text-gray-600">
-              {currency} {doctor?.fee || "120"}
+              {currency} {doctor?.fees || "120"}
             </span>
           </p>
         </div>
@@ -145,22 +183,52 @@ const Appointment = () => {
         </div>
 
         <div className="mt-4 flex flex-wrap gap-3 justify-start">
-          {docSlots[slotIndex]?.map((item: any, idx: number) => (
-            <p
-              onClick={() => setSlotTime(item.time)}
-              key={idx}
-              className={`text-sm font-medium px-5 py-2 rounded-lg cursor-pointer transition-all duration-200 ${
-                item.time === slotTime
-                  ? "bg-primary text-white shadow-md"
-                  : "text-gray-700 border border-gray-300 hover:bg-gray-100"
-              }`}
-            >
-              {item.time}
-            </p>
-          ))}
+          {docSlots[slotIndex]?.map((item: any, idx: number) => {
+            const slotDateKey = `${item.dateTime.getDate()}_${
+              item.dateTime.getMonth() + 1
+            }_${item.dateTime.getFullYear()}`;
+            const isBooked = doctor?.slots_booked?.[slotDateKey]?.includes(
+              item.time
+            );
+
+            const isSelected = item.time === slotTime;
+            const isDisabled = isBooked;
+
+            return (
+              <p
+                key={idx}
+                onClick={() => {
+                  if (!isDisabled) setSlotTime(item.time);
+                }}
+                className={`
+                  text-sm font-medium px-5 py-2 rounded-lg transition-all duration-200
+                  ${
+                    isSelected && !isDisabled
+                      ? "bg-primary text-white shadow-md"
+                      : ""
+                  }
+                  ${
+                    isDisabled
+                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      : "cursor-pointer border border-gray-300 text-gray-700 hover:bg-gray-100"
+                  }
+                `}
+              >
+                {item.time}
+              </p>
+            );
+          })}
         </div>
-        <button className="bg-primary text-white text-sm font-light px-14 py-3 rounded-full my-6 cursor-pointer">
-          Book an appointment
+        <button
+          onClick={handleAppointment}
+          disabled={!doctor?.available}
+          className={`text-sm font-light px-14 py-3 rounded-full my-6 ${
+            doctor?.available
+              ? "bg-primary text-white cursor-pointer"
+              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+          }`}
+        >
+          {doctor?.available ? "Book an appointment" : "Not available"}
         </button>
       </div>
 
