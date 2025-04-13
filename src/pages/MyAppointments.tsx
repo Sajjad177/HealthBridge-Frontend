@@ -3,10 +3,14 @@ import {
   useCancleAppointmentMutation,
   useGetUserOwnAppointmentsQuery,
 } from "../redux/features/appointment/appointmentManagement";
+import { useAppSelector } from "../redux/hook";
+import { selectCurrentUser } from "../redux/features/auth/authSlice";
 
 const MyAppointments = () => {
-  const { data, isLoading } = useGetUserOwnAppointmentsQuery("");
+  const user = useAppSelector(selectCurrentUser);
+  const { data, isLoading } = useGetUserOwnAppointmentsQuery(user?.userId);
   const appointments = data?.data;
+
   const [cancleAppointment] = useCancleAppointmentMutation();
 
   const handleCancel = async (id: string, cancelledStatus: boolean) => {
@@ -102,6 +106,15 @@ const MyAppointments = () => {
                     Appointment Cancelled
                   </button>
                 )}
+                {/* {item.isCompleted ? (
+                  <button className="sm:min-w-48 py-2 border border-green-500 rounded text-green-500 font-medium">
+                    Appointment Completed
+                  </button>
+                ) : (
+                  <button className="sm:min-w-48 py-2 border border-red-500 rounded text-red-500 font-medium cursor-not-allowed">
+                    Appointment Cancelled
+                  </button>
+                )} */}
               </div>
             </div>
           );

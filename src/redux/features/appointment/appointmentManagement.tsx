@@ -39,6 +39,14 @@ const appointmentManagement = baseApi.injectEndpoints({
       }),
       providesTags: ["Appointment"],
     }),
+    completeAppointment: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/appointment/complete-appointment/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["Appointment"],
+    }),
   }),
 });
 
@@ -48,4 +56,5 @@ export const {
   useGetUserOwnAppointmentsQuery,
   useCancleAppointmentMutation,
   useGetDoctorOwnAppointmentsQuery,
+  useCompleteAppointmentMutation, 
 } = appointmentManagement;

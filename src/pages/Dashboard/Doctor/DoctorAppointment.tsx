@@ -1,6 +1,11 @@
+import { toast } from "sonner";
 import { adminAssets } from "../../../assets/assets_admin/adminAssets";
 import { assets } from "../../../assets/assets_frontend/assets";
-import { useGetDoctorOwnAppointmentsQuery } from "../../../redux/features/appointment/appointmentManagement";
+import {
+  useCancleAppointmentMutation,
+  useCompleteAppointmentMutation,
+  useGetDoctorOwnAppointmentsQuery,
+} from "../../../redux/features/appointment/appointmentManagement";
 import { selectCurrentUser } from "../../../redux/features/auth/authSlice";
 import { useAppSelector } from "../../../redux/hook";
 import { calculateAge } from "../../../utils/global";
@@ -9,7 +14,47 @@ const DoctorAppointment = () => {
   const user = useAppSelector(selectCurrentUser);
   const { data, isLoading } = useGetDoctorOwnAppointmentsQuery(user?.userId);
   const appointments = data?.data;
-  
+
+  const [cancleAppointment] = useCancleAppointmentMutation();
+  const [completeAppointment] = useCompleteAppointmentMutation();
+
+  const handleCancel = async (id: string, cancelledStatus: boolean) => {
+    try {
+      const res = await cancleAppointment({
+        id,
+        data: { cancelled: !cancelledStatus },
+      }).unwrap();
+
+      if (res.error) {
+        toast.error(res.error);
+      } else {
+        toast.success(res.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    }
+  };
+
+  const handleComplete = async (id: string, completedStatus: boolean) => {
+    try {
+      const res = await completeAppointment({
+        id,
+        data: { isCompleted: !completedStatus },
+      }).unwrap();
+      console.log(res);
+
+      if (res.error) {
+        toast.error(res.error);
+      } else {
+        toast.success(res.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    }
+  };
+
   return (
     <div className="w-full max-w-6xl">
       <p className="mb-3 text-lg font-medium">All Appointments</p>
@@ -55,16 +100,30 @@ const DoctorAppointment = () => {
               <p>${item?.docId?.fees || 0}</p>
 
               <div className="flex gap-2">
-                <img
-                  src={adminAssets.cancel_icon}
-                  alt="Cancel"
-                  className="w-10 sm:w-8 sm:h-8 cursor-pointer"
-                />
-                <img
-                  src={adminAssets.tick_icon}
-                  alt="Approve"
-                  className="w-10 sm:w-8 sm:h-8 cursor-pointer"
-                />
+                {item.cancelled ? (
+                  <p className="text-red-400 text-xs font-medium">Cancelled</p>
+                ) : item.isCompleted ? (
+                  <p className="text-green-400 text-xs font-medium">
+                    Completed
+                  </p>
+                ) : (
+                  <>
+                    <img
+                      onClick={() => handleCancel(item._id, item?.cancelled)}
+                      src={adminAssets.cancel_icon}
+                      alt="Cancel"
+                      className="w-10 sm:w-8 sm:h-8 cursor-pointer"
+                    />
+                    <img
+                      onClick={() =>
+                        handleComplete(item._id, item?.isCompleted)
+                      }
+                      src={adminAssets.tick_icon}
+                      alt="Approve"
+                      className="w-10 sm:w-8 sm:h-8 cursor-pointer"
+                    />
+                  </>
+                )}
               </div>
             </div>
           ))
