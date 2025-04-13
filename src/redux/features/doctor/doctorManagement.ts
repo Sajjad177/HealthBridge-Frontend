@@ -29,9 +29,16 @@ const doctorManagement = baseApi.injectEndpoints({
       query: (id) => ({
         url: `/doctor/${id}`,
         method: "GET",
-
       }),
       providesTags: ["Doctor"],
+    }),
+    updateDoctorProfile: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/doctor/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["Doctor"],
     }),
   }),
 });
@@ -41,4 +48,5 @@ export const {
   useAddDoctorMutation,
   useToggleAvabilityMutation,
   useGetSingleDoctorQuery,
+  useUpdateDoctorProfileMutation,
 } = doctorManagement;

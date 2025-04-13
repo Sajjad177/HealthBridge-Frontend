@@ -84,7 +84,7 @@ const AdminDashboard = () => {
 
         <div className="pt-5 border border-t-0 border-gray-100">
           {/* enter this in map function */}
-          {appointments?.map((item: any, index: number) => (
+          {appointments?.slice(0, 5)?.map((item: any, index: number) => (
             <div
               key={index}
               className="flex items-center gap-5 px-5 py-3 hover:bg-gray-100"

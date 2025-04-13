@@ -29,7 +29,6 @@ const DoctorLogin = () => {
       const { email, password } = data;
       const result = await doctorLogin({ email, password }).unwrap();
       const user = verifyToken(result.data.token);
-      console.log(result);
 
       dispatch(
         setUser({
@@ -39,7 +38,7 @@ const DoctorLogin = () => {
       );
 
       toast.success("Login successful");
-      navigate("/dashboard");
+      navigate("/dashboard/doc");
       reset();
     } catch (error) {
       console.log(error);

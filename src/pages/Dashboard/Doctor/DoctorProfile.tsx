@@ -1,95 +1,206 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { assets } from "../../../assets/assets_frontend/assets";
+import { selectCurrentUser } from "../../../redux/features/auth/authSlice";
+import { useAppSelector } from "../../../redux/hook";
+import {
+  useGetSingleDoctorQuery,
+  useUpdateDoctorProfileMutation,
+} from "../../../redux/features/doctor/doctorManagement";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 const DoctorProfile = () => {
   const [isEdit, setIsEdit] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const user = useAppSelector(selectCurrentUser);
+
+  const { data } = useGetSingleDoctorQuery(user?.userId);
+  const profileData = data?.data;
+
+  const [updateDoctorProfile] = useUpdateDoctorProfileMutation();
+
+  const { register, handleSubmit, reset, watch, setValue } = useForm({
+    defaultValues: {
+      name: "",
+      degree: "",
+      experience: "",
+      about: "",
+      fees: "",
+      address: "",
+      image: "",
+      available: false,
+    },
+  });
+
+  useEffect(() => {
+    if (profileData) {
+      reset({
+        name: profileData.name || "",
+        degree: profileData.degree || "",
+        experience: profileData.experience || "",
+        about: profileData.about || "",
+        fees: profileData.fees || "",
+        address: profileData.address || "",
+        image: profileData.image || "",
+        available: profileData.available || false,
+      });
+    }
+  }, [profileData, reset]);
+
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    try {
+      const formData = new FormData();
+      formData.append("data", JSON.stringify(data));
+      formData.append("file", imageFile!);
+
+      const res = await updateDoctorProfile({
+        id: user?.userId,
+        data: formData,
+      }).unwrap();
+
+      if (res?.error) {
+        toast.error(res.error);
+      } else {
+        toast.success(res.message);
+        setIsEdit(false);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    }
+  };
 
   return (
-    <div>
-      <div className="flex flex-col gap-4 m-5">
-        <div>
-          <img
-            src={assets.header_img}
-            alt=""
-            className="bg-[#5f5fff]/80 w-full sm:max-w-64 rounded-lg "
-          />
-        </div>
+    <div className="max-w-[550px]">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col gap-4 m-5"
+      >
+        <label htmlFor="image">
+          <div className="inline-block relative cursor-pointer">
+            <img
+              src={
+                imageFile
+                  ? URL.createObjectURL(imageFile)
+                  : watch("image") || assets.profile_pic
+              }
+              alt="Doctor"
+              className="w-36 h-36 rounded-full object-cover border"
+            />
+            {isEdit && (
+              <img
+                src={assets.upload_icon}
+                alt="Upload Icon"
+                className="absolute w-10 bottom-2 right-2 cursor-pointer"
+              />
+            )}
+          </div>
+          {isEdit && (
+            <input
+              type="file"
+              id="image"
+              hidden
+              onChange={(e) => {
+                if (e.target.files?.[0]) {
+                  setImageFile(e.target.files[0]);
+                }
+              }}
+            />
+          )}
+        </label>
 
         <div className="flex-1 border border-stone-100 rounded-lg p-8 py-7 bg-white">
-          {/* ---------------show doctor info---------------- */}
-          <p className="flex items-center gap-2 text-3xl font-medium text-gray-700">
-            Sadiya Tasnim
-          </p>
+          <p className="text-3xl font-medium text-gray-700">{watch("name")}</p>
+
           <div className="flex items-center gap-2 mt-1 text-gray-600">
-            <p>MBBS - Pediatricians</p>
-            <button className="py-0.5 px-3 border border-gray-200 rounded-full">
-              2 years
-            </button>
+            {isEdit ? (
+              <input {...register("degree")} type="text" />
+            ) : (
+              <p>{watch("degree")}</p>
+            )}
+            <div className="py-0.5 px-3 border border-gray-200 rounded-full">
+              {isEdit ? (
+                <input {...register("experience")} type="number" />
+              ) : (
+                <p>{watch("experience")} years</p>
+              )}
+            </div>
           </div>
-          {/* ---------doc about section--------- */}
+
           <div>
             <p className="flex text-center gap-1 text-lg font-medium text-neutral-800 mt-3">
               About:
             </p>
             <p className="text-sm text-gray-600 max-w-[700px] mt-1">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia
-              libero et veniam, nostrum eligendi quis non, nobis consequuntur
-              perferendis quod ex, odio dicta nemo minus.
+              {watch("about")}
             </p>
           </div>
 
           <p className="text-gray-600 mt-4 font-medium">
             Appointment fee:{" "}
             <span className="text-gray-800">
-              {isEdit ? <input type="number" defaultValue={500} /> : "৳ 500"}
+              {isEdit ? (
+                <input {...register("fees")} type="number" />
+              ) : (
+                <>৳ {watch("fees")}</>
+              )}
             </span>
           </p>
 
           <div className="mt-4 flex gap-2 items-center">
             <p>Address:</p>
-            <p className="text-gray-600 text-sm">
-              {isEdit ? (
-                <input
-                  type="text"
-                  defaultValue={"House-1, Road-1, Block-A, Dhaka"}
-                />
-              ) : (
-                "House-1, Road-1, Block-A, Dhaka"
-              )}
-            </p>
+            {isEdit ? (
+              <input
+                {...register("address")}
+                type="text"
+                className="text-sm border p-1"
+              />
+            ) : (
+              <p className="text-gray-600 text-sm">{watch("address")}</p>
+            )}
           </div>
 
-          {/* this check box doctor can update his availability */}
           <div className="flex gap-2 items-center pt-2">
-            {/* after function uncomment this */}
-            {/* <input
-              onChange={() => isEdit}
-              checked={profileData.available}
-              type="checkbox"
-              name=""
-              id=""
-            /> */}
-            <input type="checkbox" name="" id="" />
-            <label htmlFor="">Available</label>
+            {isEdit ? (
+              <>
+                <input
+                  type="checkbox"
+                  {...register("available")}
+                  checked={watch("available")}
+                  onChange={(e) => setValue("available", e.target.checked)}
+                />
+                <label>Available</label>
+              </>
+            ) : (
+              <>
+                <input type="checkbox" checked={watch("available")} disabled />
+                <label>Available</label>
+              </>
+            )}
           </div>
 
-          {isEdit ? (
+          {isEdit && (
             <button
-              onClick={() => setIsEdit(false)}
-              className="px-4 py-1 border border-[#5f5fff] text-sm rounded-full mt-5 cursor-pointer hover:bg-[#5f5fff] hover:text-white transition-all duration-300 ease-in-out"
+              type="submit"
+              className="px-4 py-1 border border-[#5f5fff] text-sm rounded-full mt-5 cursor-pointer hover:bg-[#5f5fff] hover:text-white transition-all"
             >
               Save
             </button>
-          ) : (
-            <button
-              onClick={() => setIsEdit(true)}
-              className="px-4 py-1 border border-[#5f5fff] text-sm rounded-full mt-5 cursor-pointer hover:bg-[#5f5fff] hover:text-white transition-all duration-300 ease-in-out"
-            >
-              Edit
-            </button>
           )}
         </div>
-      </div>
+      </form>
+
+      {!isEdit && (
+        <div className="m-5">
+          <button
+            onClick={() => setIsEdit(true)}
+            type="button"
+            className="px-4 py-1 border border-[#5f5fff] text-sm text-[#5f5fff] rounded-full hover:bg-[#5f5fff] hover:text-white transition-all duration-300 ease-in-out"
+          >
+            Edit Profile
+          </button>
+        </div>
+      )}
     </div>
   );
 };
