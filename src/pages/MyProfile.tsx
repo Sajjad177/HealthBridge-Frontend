@@ -8,13 +8,14 @@ import {
   useUpdateUserProfileMutation,
 } from "../redux/features/user/userManagement";
 import { toast } from "sonner";
+import PageLoading from "../components/PageLoading";
 
 const MyProfile = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [image, setImage] = useState("");
 
   const user = useAppSelector(selectCurrentUser);
-  const { data } = useGetSingleUserQuery(user?.userId);
+  const { data, isLoading } = useGetSingleUserQuery(user?.userId);
   const profileData = data?.data;
 
   const [updateUserProfile] = useUpdateUserProfileMutation();
@@ -57,7 +58,6 @@ const MyProfile = () => {
         id: user?.userId,
         data: formData,
       }).unwrap();
-      console.log(res);
 
       if (res?.error) {
         toast.error(res.error);
@@ -71,6 +71,14 @@ const MyProfile = () => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center mt-20">
+        <PageLoading />
+      </div>
+    );
+  }
+
   return (
     <div className="p-6 bg-white rounded-lg max-w-lg">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
@@ -81,7 +89,9 @@ const MyProfile = () => {
               <div className="inline-block relative cursor-pointer">
                 <img
                   src={
-                    image ? URL.createObjectURL(image as any) : watch("image")
+                    image
+                      ? URL.createObjectURL(image as any)
+                      : watch("image") || assets.profile_pic
                   }
                   alt=""
                   className="cursor-pointer w-36 rounded opacity-75"
@@ -92,8 +102,13 @@ const MyProfile = () => {
                   className="absolute w-10 bottom-12 right-12 cursor-pointer"
                 />
               </div>
+
               <input
-                onChange={(e) => setImage(e.target.files[0])}
+                onChange={(e) => {
+                  if (e.target.files && e.target.files.length > 0) {
+                    setImage(e.target.files[0] as any);
+                  }
+                }}
                 type="file"
                 id="image"
                 hidden

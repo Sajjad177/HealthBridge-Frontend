@@ -6,15 +6,26 @@ import {
 } from "../../../redux/features/appointment/appointmentManagement";
 import { selectCurrentUser } from "../../../redux/features/auth/authSlice";
 import { useAppSelector } from "../../../redux/hook";
+import PageLoading from "../../../components/PageLoading";
 
 const DoctorDashboard = () => {
   const user = useAppSelector(selectCurrentUser);
   const { data, isLoading } = useGetDoctorOwnAppointmentsQuery(user?.userId);
   const appointments = data?.data;
+  console.log(appointments);
 
   const totalPatient =
     appointments?.filter((item: any) => item.isCompleted && !item.cancelled)
       .length || 0;
+
+  const totalEarnings = appointments?.reduce((acc: any, item: any) => {
+    if (item.isCompleted && !item.cancelled && item.payment === "Paid") {
+      acc += item?.docId?.fees;
+    }
+    return acc;
+  }, 0);
+
+  // console.log(totalEarnings);
 
   const [cancleAppointment] = useCancleAppointmentMutation();
 
@@ -37,7 +48,11 @@ const DoctorDashboard = () => {
   };
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="flex justify-center items-center mt-20">
+        <PageLoading />
+      </div>
+    );
   }
 
   return (
@@ -46,7 +61,9 @@ const DoctorDashboard = () => {
         <div className="admnin-dashboard-card">
           <img className="w-14" src={adminAssets.earning_icon} alt="" />
           <div>
-            <p className="text-xl font-semibold text-gray-600">$200</p>
+            <p className="text-xl font-semibold text-gray-600">
+              ৳ {totalEarnings}
+            </p>
             <p className="text-gray-400">Earnings</p>
           </div>
         </div>
@@ -101,8 +118,14 @@ const DoctorDashboard = () => {
               </div>
               {/* after function add uncomment this if cancelled then show a delete icon for permanent delete */}
 
-              {item.isCancelled ? (
-                <p className="text-red-500 text-xs font-medium">cancelled</p>
+              {item.isCompleted ? (
+                <p className="text-green-500 text-[14px] font-medium">
+                  Completed
+                </p>
+              ) : item.cancelled ? (
+                <p className="text-red-500 text-[14px] font-medium">
+                  Cancelled
+                </p>
               ) : (
                 <img
                   onClick={() => handleCancel(item._id, item?.cancelled)}

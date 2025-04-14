@@ -1,14 +1,19 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useGetAllDoctorsQuery } from "../redux/features/doctor/doctorManagement";
+import PageLoading from "./PageLoading";
 
 const TopDoctors = () => {
   const navigate = useNavigate();
   const { data, isLoading } = useGetAllDoctorsQuery("");
   const doctors = data?.data;
-  console.log(doctors);
+
 
   if (isLoading) {
-    return <div>loading.....</div>;
+    return (
+      <div className="flex justify-center items-center mt-20">
+        <PageLoading />
+      </div>
+    );
   }
 
   return (

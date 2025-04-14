@@ -122,7 +122,7 @@ const DoctorProfile = () => {
               {isEdit ? (
                 <input {...register("experience")} type="number" />
               ) : (
-                <p>{watch("experience")} years</p>
+                <p>{watch("experience")}</p>
               )}
             </div>
           </div>
@@ -173,8 +173,13 @@ const DoctorProfile = () => {
               </>
             ) : (
               <>
-                <input type="checkbox" checked={watch("available")} disabled />
-                <label>Available</label>
+                <input
+                  className="accent-green-500"
+                  type="checkbox"
+                  checked={watch("available")}
+                  disabled
+                />
+                <label className="text-sm text-green-500">Available</label>
               </>
             )}
           </div>

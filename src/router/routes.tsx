@@ -12,10 +12,12 @@ import Dashboard from "../pages/Dashboard/Dashboard";
 import dashbardRouters from "./dashboardRoutes";
 import DoctorLogin from "../pages/DoctorLogin";
 import PaymentSuccess from "../components/PaymentSuccess";
+import ErrorPage from "../pages/ErrorPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
+    errorElement: <ErrorPage />,
     element: <MainLayout />,
     children: [
       {

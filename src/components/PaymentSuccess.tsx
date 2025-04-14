@@ -77,7 +77,7 @@ const PaymentSuccess = () => {
           <strong>Transaction Status:</strong>{" "}
           <button
             className={`px-3 py-1 text-sm font-medium rounded-full ${
-              paymentData?.transaction_status === "success"
+              paymentData?.bank_status === "Success"
                 ? "bg-green-600 text-white"
                 : "bg-red-600 text-white"
             }`}

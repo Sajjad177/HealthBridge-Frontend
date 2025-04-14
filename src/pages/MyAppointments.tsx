@@ -9,6 +9,7 @@ import {
 } from "../redux/features/appointment/appointmentManagement";
 import { useAppSelector } from "../redux/hook";
 import { selectCurrentUser } from "../redux/features/auth/authSlice";
+import PageLoading from "../components/PageLoading";
 
 const MyAppointments = () => {
   const user = useAppSelector(selectCurrentUser);
@@ -61,7 +62,11 @@ const MyAppointments = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center ">
+        <PageLoading />
+      </div>
+    );
   }
 
   return (
@@ -77,7 +82,7 @@ const MyAppointments = () => {
           const isCompleted = item.isCompleted;
 
           const showPayAndCancelBtns = !isCancelled && !isPaid && !isCompleted;
-          const showPaidBtn = isPaid && !isCancelled;
+          const showPaidBtn = isPaid && !isCancelled && !isCompleted;
 
           return (
             <div

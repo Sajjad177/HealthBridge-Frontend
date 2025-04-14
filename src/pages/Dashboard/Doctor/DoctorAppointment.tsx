@@ -9,11 +9,13 @@ import {
 import { selectCurrentUser } from "../../../redux/features/auth/authSlice";
 import { useAppSelector } from "../../../redux/hook";
 import { calculateAge } from "../../../utils/global";
+import PageLoading from "../../../components/PageLoading";
 
 const DoctorAppointment = () => {
   const user = useAppSelector(selectCurrentUser);
   const { data, isLoading } = useGetDoctorOwnAppointmentsQuery(user?.userId);
   const appointments = data?.data;
+  console.log(appointments);
 
   const [cancleAppointment] = useCancleAppointmentMutation();
   const [completeAppointment] = useCompleteAppointmentMutation();
@@ -42,7 +44,6 @@ const DoctorAppointment = () => {
         id,
         data: { isCompleted: !completedStatus },
       }).unwrap();
-      console.log(res);
 
       if (res.error) {
         toast.error(res.error);
@@ -54,6 +55,14 @@ const DoctorAppointment = () => {
       toast.error("Something went wrong");
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center mt-20">
+        <PageLoading />
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-6xl">
@@ -90,20 +99,22 @@ const DoctorAppointment = () => {
               </div>
 
               <p className="text-green-600 font-semibold">
-                {item?.payment === "ONLINE" ? "ONLINE" : "CASH"}
+                {item.payment === "Paid" ? "Paid" : "Cash"}
               </p>
 
               <p>{calculateAge(item?.userId?.dateOfBirth)}</p>
               <p>
                 {item?.slotDate} - {item?.slotTime}
               </p>
-              <p>${item?.docId?.fees || 0}</p>
+              <p>৳ {item?.docId?.fees || 0}</p>
 
               <div className="flex gap-2">
                 {item.cancelled ? (
-                  <p className="text-red-400 text-xs font-medium">Cancelled</p>
+                  <p className="text-red-400 text-[14px]  font-medium">
+                    Cancelled
+                  </p>
                 ) : item.isCompleted ? (
-                  <p className="text-green-400 text-xs font-medium">
+                  <p className="text-green-400 text-[14px]  font-medium">
                     Completed
                   </p>
                 ) : (

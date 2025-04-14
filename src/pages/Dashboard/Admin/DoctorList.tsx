@@ -3,9 +3,10 @@ import {
   useGetAllDoctorsQuery,
   useToggleAvabilityMutation,
 } from "../../../redux/features/doctor/doctorManagement";
+import PageLoading from "../../../components/PageLoading";
 
 const DoctorList = () => {
-  const { data } = useGetAllDoctorsQuery("");
+  const { data, isLoading } = useGetAllDoctorsQuery("");
   const doctors = data?.data;
   const [updateAvailability] = useToggleAvabilityMutation();
 
@@ -29,6 +30,14 @@ const DoctorList = () => {
       toast.error("Something went wrong");
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center mt-20">
+        <PageLoading />
+      </div>
+    );
+  }
 
   return (
     <div className="m-5 max-h-[90vh] overflow-y-scroll">
