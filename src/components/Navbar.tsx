@@ -64,6 +64,7 @@ const Navbar = () => {
             <img src={assets.dropdown_icon} alt="" className="w-2.5 " />
             <div className="absolute top-0 right-0 pt-14 text-base font-medium text-gray-600 hidden group-hover:block">
               <div className="min-w-48 bg-stone-100 rounded flex flex-col gap-2 p-2">
+                {/* Doctor & Admin: Dashboard */}
                 {user && (user.role === "admin" || user.role === "doctor") && (
                   <p
                     onClick={() =>
@@ -77,24 +78,27 @@ const Navbar = () => {
                   </p>
                 )}
 
-                {user && user.role === "user" ? (
-                  <div>
-                    <p
-                      onClick={() => navigate("/my-appointments")}
-                      className="hover:text-black cursor-pointer"
-                    >
-                      My Appointments
-                    </p>
-                  </div>
-                ) : (
-                  ""
+                {/* User: My Appointments */}
+                {user?.role === "user" && (
+                  <p
+                    onClick={() => navigate("/my-appointments")}
+                    className="hover:text-black cursor-pointer"
+                  >
+                    My Appointments
+                  </p>
                 )}
-                <p
-                  onClick={() => navigate("/my-profile")}
-                  className="hover:text-black cursor-pointer"
-                >
-                  My Profile
-                </p>
+
+                {/* Everyone except Doctor: My Profile */}
+                {user && user.role !== "doctor" && (
+                  <p
+                    onClick={() => navigate("/my-profile")}
+                    className="hover:text-black cursor-pointer"
+                  >
+                    My Profile
+                  </p>
+                )}
+
+                {/* All roles: Logout */}
                 <p
                   onClick={handleLogout}
                   className=" text-red-500 hover:text-red-600 cursor-pointer"

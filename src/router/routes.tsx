@@ -11,6 +11,7 @@ import MainLayout from "../App";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import dashbardRouters from "./dashboardRoutes";
 import DoctorLogin from "../pages/DoctorLogin";
+import PaymentSuccess from "../components/PaymentSuccess";
 
 const router = createBrowserRouter([
   {
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
     path: "/dashboard",
     element: <Dashboard />,
     children: dashbardRouters,
+  },
+  {
+    path: "/appointment/verify-payment",
+    element: <PaymentSuccess />,
   },
   {
     path: "/login",
