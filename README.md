@@ -91,19 +91,13 @@ Admins and doctors have access to separate dashboards for managing patients, app
 git clone https://github.com/your-username/hospital-management-system.git
 cd hospital-management-system
 ```
-### 2. Install Server Dependencies
+### 2. Install Dependencies
 
 ```bash
   cd server
   npm install
 ```
-### 3. Create a .env File in the Server Directory
-  ```bash
-    PORT=5000
-    MONGO_URI=your_mongo_connection_string
-    JWT_SECRET=your_jwt_secret
-    REACT_APP_API_URL=http://localhost:5000
-```
+
 ### 4. Run the Server
   ```bash
     npm run dev
