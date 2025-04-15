@@ -1,4 +1,4 @@
-# 🏥 Hospital Management System
+# 🏥 Hospital Management System ### 🌐 [Live Demo](https://health-bridge-frontend-jet.vercel.app)  
 
 A full-featured hospital management web application where users can book doctor appointments, make payments, cancel appointments, and manage their profiles. The system includes secure JWT authentication and role-based dashboards for Admins and Doctors. This project is built using the **MERN stack (MongoDB, Express.js, React, Node.js)** and supports full **CRUD operations** across all modules.
 
