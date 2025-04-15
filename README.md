@@ -1,86 +1,84 @@
 # 🏥 Hospital Management System
 
-A full-featured hospital management web application where users can book doctor appointments, make payments, cancel appointments, and manage their profiles. The system includes secure JWT authentication and role-based dashboards for Admins and Doctors. This project is built using the MERN (MongoDB, Express, React, Node.js) stack and supports full CRUD operations across all modules.
+A full-featured hospital management web application where users can book doctor appointments, make payments, cancel appointments, and manage their profiles. The system includes secure JWT authentication and role-based dashboards for Admins and Doctors. This project is built using the **MERN stack (MongoDB, Express.js, React, Node.js)** and supports full **CRUD operations** across all modules.
 
 ---
 
 ## 🚀 Project Overview
 
-This Hospital Management System allows users to easily schedule appointments with doctors, make payments, and manage or cancel their bookings. Admins and doctors have access to separate dashboards for managing patients, appointments, and other medical services. The app features secure authentication using JWT, dynamic CRUD operations, and a robust profile management system. It is built using the MERN stack, providing a responsive and efficient user experience.
+The Hospital Management System allows users to seamlessly:
+
+- Book doctor appointments
+- Make secure payments
+- Cancel or manage bookings
+- Update personal profiles
+
+Admins and doctors have access to separate dashboards for managing patients, appointments, availability, and more. The application includes JWT-based authentication, real-time appointment tracking, and a clean responsive UI optimized for all devices.
 
 ---
 
-1. User Registration & Login
-Users can register and log in with a secure authentication system using JWT (JSON Web Tokens).
+## 🔄 System Workflow
 
-Role-based access: Users are assigned roles like Patient, Doctor, or Admin during account creation.
+### 1. 👥 User Registration & Login
+- Secure user authentication using **JWT (JSON Web Tokens)**
+- Role-based access control (Patient, Doctor, Admin)
 
-2. Book Doctor Appointment
-Patients can browse available doctors.
+### 2. 🩺 Book Doctor Appointments
+- Browse available doctors with details and schedule
+- Choose time slots and submit appointment requests
+- Integrated payment during booking
 
-View doctor details, availability, and select appointment time slots.
+### 3. 💳 Payment Integration
+- Secure online payment for appointments
+- Payment history is visible in the user dashboard
 
-Submit appointment requests with payment integration.
+### 4. 📆 Appointment Management
+- Patients can view upcoming and past appointments
+- Option to cancel appointments before the scheduled time
+- Doctors can approve or reject appointments
 
-3. Payment Integration
-Secure online payment system integrated for appointment bookings.
+### 5. 🛠️ Admin Dashboard
+- Manage all users, doctors, and appointments
+- Add, edit, or remove doctor profiles
+- Full CRUD operations for doctors and appointments
 
-Payment status is recorded and visible in the user dashboard.
+### 6. 🩻 Doctor Dashboard
+- View assigned appointments
+- Manage availability and patient appointment statuses
 
-4. Appointment Management
-Users can view their upcoming and past appointments.
+### 7. 👤 Profile Management
+- All users can update their profile info including name, image, and contact details
 
-Appointments can be canceled by the user before a certain time.
-
-Doctors can approve/reject appointments from their dashboard.
-
-5. Admin Dashboard
-Admin can view and manage all users, doctors, and appointments.
-
-Admin can create, update, or delete doctor profiles.
-
-Full CRUD operations for doctors and appointments.
-
-6. Doctor Dashboard
-Doctors can view their own appointments.
-
-Update availability and manage patient appointment statuses.
-
-7. Profile Management
-All users (Patients, Doctors, Admins) can update their profile information including name, image, and contact details.
-
-----
+---
 
 ## 🧩 Features
 
 - 🔐 JWT Authentication (Login/Register)
-- 👤 User profile management
-- 🩺 Book doctor appointments
-- 💳 Payment integration
-- ❌ Cancel appointments
-- 📊 Admin Dashboard:
-  - Manage users
-  - Manage doctors
-  - View all appointments
-- 🩻 Doctor Dashboard:
-  - View appointment list
-  - Manage availability
-- 🔁 Full CRUD operations
-- 📱 Responsive UI (Mobile + Desktop)
+- 👤 User Profile Management
+- 🩺 Doctor Appointment Booking
+- 💳 Payment Gateway Integration
+- ❌ Cancel Appointments
+- 📊 Admin Dashboard
+  - Manage Users
+  - Manage Doctors
+  - View All Appointments
+- 🩻 Doctor Dashboard
+  - View Appointment List
+  - Manage Availability
+- 🔁 Full CRUD Operations
+- 📱 Responsive Design (Mobile + Desktop)
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Frontend:** React, React Router, Axios, Tailwind CSS / CSS
+- **Frontend:** React, React Router, Axios, Tailwind CSS / Custom CSS
 - **Backend:** Node.js, Express.js
-- **Database:** MongoDB + Mongoose
+- **Database:** MongoDB with Mongoose
 - **Authentication:** JSON Web Tokens (JWT)
-- **State Management:** Redux / Context API (if used)
-- **API Handling:** RESTful APIs
-- **Others:** Stripe / SSLCommerz / (any payment API used)
-
----
+- **State Management:** Redux Toolkit / Context API (based on implementation)
+- **API Communication:** RESTful API
+- **Payment Gateway:** Stripe / SSLCommerz / Other (based on integration)
 
 ---
 
@@ -91,11 +89,21 @@ All users (Patients, Doctors, Admins) can update their profile information inclu
 ```bash
 git clone https://github.com/your-username/hospital-management-system.git
 cd hospital-management-system
-cd server
-npm install
-# Add .env file
-npm run dev
-PORT=5000
-MONGO_URI=your_mongo_connection_string
-JWT_SECRET=your_jwt_secret
-REACT_APP_API_URL=http://localhost:5000
+```
+### 2. Install Server Dependencies
+
+```bash
+  cd server
+  npm install
+```
+### 3. Create a .env File in the Server Directory
+  ```bash
+    PORT=5000
+    MONGO_URI=your_mongo_connection_string
+    JWT_SECRET=your_jwt_secret
+    REACT_APP_API_URL=http://localhost:5000
+```
+### 4. Run the Server
+  ```bash
+    npm run dev
+  ```
