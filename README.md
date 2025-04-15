@@ -10,6 +10,47 @@ This Hospital Management System allows users to easily schedule appointments wit
 
 ---
 
+1. User Registration & Login
+Users can register and log in with a secure authentication system using JWT (JSON Web Tokens).
+
+Role-based access: Users are assigned roles like Patient, Doctor, or Admin during account creation.
+
+2. Book Doctor Appointment
+Patients can browse available doctors.
+
+View doctor details, availability, and select appointment time slots.
+
+Submit appointment requests with payment integration.
+
+3. Payment Integration
+Secure online payment system integrated for appointment bookings.
+
+Payment status is recorded and visible in the user dashboard.
+
+4. Appointment Management
+Users can view their upcoming and past appointments.
+
+Appointments can be canceled by the user before a certain time.
+
+Doctors can approve/reject appointments from their dashboard.
+
+5. Admin Dashboard
+Admin can view and manage all users, doctors, and appointments.
+
+Admin can create, update, or delete doctor profiles.
+
+Full CRUD operations for doctors and appointments.
+
+6. Doctor Dashboard
+Doctors can view their own appointments.
+
+Update availability and manage patient appointment statuses.
+
+7. Profile Management
+All users (Patients, Doctors, Admins) can update their profile information including name, image, and contact details.
+
+----
+
 ## 🧩 Features
 
 - 🔐 JWT Authentication (Login/Register)
@@ -40,9 +81,6 @@ This Hospital Management System allows users to easily schedule appointments wit
 - **Others:** Stripe / SSLCommerz / (any payment API used)
 
 ---
-
-## 📂 Folder Structure
-
 
 ---
 
